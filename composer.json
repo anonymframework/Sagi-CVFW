@@ -1,0 +1,14 @@
+{
+    "name": "sagi/sagi-cvfw",
+    "description": "Sagi mini framework",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "anonymframework",
+            "email": "vahit.serif119@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
