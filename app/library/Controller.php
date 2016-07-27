@@ -44,8 +44,15 @@ class Controller
         return $this;
     }
 
+    public function login($usernameOrEmail, $password)
+    {
+        $login = $this->db()->setTable('users')->where('username', $usernameOrEmail)->orWhere('email', $usernameOrEmail)->where('password', $password);
+
+        var_dump($login->get());
+    }
+
     /**
-     * @return mixed
+     * @return Database
      */
     public function db()
     {

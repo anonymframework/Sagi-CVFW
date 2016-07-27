@@ -282,33 +282,27 @@ class Database
     public function where($a, $b = null, $c = null)
     {
         if (is_null($b) && is_null($c)) {
+            $a[] = 'AND';
             $this->where[] = $a;
         } elseif (is_null($c)) {
-            $this->where[] = [$a, '=', $b];
+            $this->where[] = [$a, '=', $b, 'AND'];
         } else {
-            $this->where[] = [$a, $b, $c];
+            $this->where[] = [$a, $b, $c, 'AND'];
         }
 
         return $this;
     }
 
-    /**
-     * @param $a
-     * @param null $b
-     * @param null $c
-     * @return $this
-     */
     public function orWhere($a, $b = null, $c = null)
     {
         if (is_null($b) && is_null($c)) {
-            $this->orWhere[] = $a;
+            $a[] = 'OR';
+            $this->where[] = $a;
         } elseif (is_null($c)) {
-            $this->orWhere[] = [$a, '=', $b];
+            $this->where[] = [$a, '=', $b, 'OR'];
         } else {
-            $this->orWhere[] = [$a, $b, $c];
+            $this->where[] = [$a, $b, $c, 'OR'];
         }
-
-        return $this;
     }
 
     /**
@@ -393,12 +387,9 @@ class Database
 
         $string = '';
         if (!empty($where)) {
-            $string .= $this->prepareAndWhereQuery();
+            $string .= $this->prepareAllWhereQueries();
         }
 
-        if (!empty($orWhere)) {
-            $string .= $this->prepare0rWhereQuery();
-        }
 
         if ($string !== '') {
             $string = 'WHERE ' . $string;
@@ -410,32 +401,24 @@ class Database
     /**
      * @return string
      */
-    private function prepareAndWhereQuery()
+    private function prepareAllWhereQueries()
     {
         $where = $this->getWhere();
 
-        $prepared = $this->databaseStringBuilderWithStart($where, "AND");
+        $args = [];
+        $s = '';
+        foreach ($where as $item) {
+            $s .= " {$item[0]} {$item[1]} ? $item[3]";
+            $args[] = $item[2];
+        }
 
-        $this->args = array_merge($this->args, $prepared['args']);
+        $s = rtrim($s, $item[3]);
 
-        return $prepared['content'];
-    }
-
-
-    /**
-     * @return string
-     */
-    private function prepare0rWhereQuery()
-    {
-        $where = $this->getOrWhere();
-
-
-        $prepared = $this->databaseStringBuilderWithStart($where, "Or");
-
-        $this->args = array_merge($this->args, $prepared['args']);
+        $this->args = array_merge($this->args, $args);
 
         return $prepared['content'];
     }
+
 
     /**
      * Set verisi oluşturur
