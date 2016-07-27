@@ -1,4 +1,7 @@
 <?php
 
 
-return array();
+return array(
+    'default_controller' => 'Home',
+
+);
