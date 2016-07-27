@@ -1,6 +1,9 @@
 <?php
 
-spl_autoload_register(function($className)
-{
-    var_dump($className);
-});
+$configs = include 'app/configs.php';
+
+$app = new App($configs);
+
+$app->handleRequest();
+
+
