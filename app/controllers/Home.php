@@ -3,17 +3,13 @@
 namespace Controllers;
 
 
-class Home
+class Home extends \Controller
 {
 
     public function index()
     {
-        echo 'hello world';
+        $this->with('message', 'hello world')->view('index');
     }
 
-    public function test($message)
-    {
-        echo $message;
-    }
 
 }

@@ -11,7 +11,7 @@ class Controller
 
     public static $db;
 
-    private static $view;
+    protected static $view;
 
     /**
      * @param View $view

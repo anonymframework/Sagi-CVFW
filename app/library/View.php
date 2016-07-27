@@ -237,11 +237,11 @@ class View
             $this->setFile($file);
         }
 
+
         $this->with('viewClassObject', $this);
         if ($content = $this->getFileContent()) {
 
             $replaceContent = $this->handleContent($content);
-
 
             if ($return) {
                 return $replaceContent;

@@ -35,6 +35,8 @@ class App
             case 1:
                 if ($parsed[0] === "") {
                     $this->getDefaultController();
+                } else {
+                    $this->callMethodByController($parsed[0], "index", []);
                 }
                 break;
             case 2:
