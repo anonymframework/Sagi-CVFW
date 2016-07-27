@@ -101,6 +101,11 @@ class App
         $this->controller = new $controller;
     }
 
+    public function createViewInstance()
+    {
+        return new View($this->configs['view']);
+    }
+
     /**
      * @return Database
      */

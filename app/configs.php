@@ -9,5 +9,11 @@ return array(
         'dbname' => 'test',
         'username' => 'root',
         'password' => 'sanane123'
+    ],
+
+    'view' => [
+
+        'view_path' => 'app/views',
+        'dalvik_path' => 'app/dalviks'
     ]
 );
