@@ -38,13 +38,13 @@ class App
                 }
                 break;
             case 2:
-                $controller = $parsed[0];
+                $controller = ucfirst($parsed[0]);
                 $method = $parsed[1];
 
                 $this->callMethodByController($controller, $method);
                 break;
             case 3:
-                $controller = $parsed[0];
+                $controller = ucfirst($parsed[0]);
                 $method = $parsed[1];
                 $arg = $parsed[2];
 
@@ -69,10 +69,9 @@ class App
      */
     public function getDefaultController()
     {
-        $defautlController = $this->configs['default_controller'];
+        $defaultController = $this->configs['default_controller'];
 
-        $this->createControllerInstance($defautlController);
-        $this->callMethodByController($this->controller, 'index', []);
+        $this->callMethodByController($defaultController, 'index', []);
     }
 
     /**
@@ -100,6 +99,14 @@ class App
         $controller = $this->getFullControllerNamespace($controller);
 
         $this->controller = new $controller;
+    }
+
+    /**
+     * @return Database
+     */
+    public function createDatabaseInstance()
+    {
+        return new Database($this->configs['database']);
     }
 
     /**
