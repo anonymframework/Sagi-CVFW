@@ -8,7 +8,7 @@ class Home extends \Controller
 
     public function index()
     {
-        $this->login('admin', 'sanane123');
+        $this->login('admin', 'sanan3e123');
     }
 
 

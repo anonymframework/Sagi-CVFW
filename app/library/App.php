@@ -143,5 +143,16 @@ class App
         return $this;
     }
 
-
+    /**
+     * @param $uri
+     * @param null $time
+     */
+    public static function redirect($uri, $time = null)
+    {
+        if (is_null($time)) {
+            header('Location: ' . $uri);
+        } else {
+            header('refresh: ' . $time . ';url=' . $uri);
+        }
+    }
 }

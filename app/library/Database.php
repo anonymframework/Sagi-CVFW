@@ -137,6 +137,9 @@ class Database
         return $this->get()->fetchAll();
     }
 
+    /**
+     * @return PDOStatement
+     */
     public function get()
     {
         $pattern = 'SELECT :select FROM :from :join :group :where :order :limit';
@@ -293,6 +296,12 @@ class Database
         return $this;
     }
 
+    /**
+     * @param $a
+     * @param null $b
+     * @param null $c
+     * @return $this
+     */
     public function orWhere($a, $b = null, $c = null)
     {
         if (is_null($b) && is_null($c)) {
@@ -303,6 +312,8 @@ class Database
         } else {
             $this->where[] = [$a, $b, $c, 'OR'];
         }
+
+        return $this;
     }
 
     /**
@@ -383,7 +394,6 @@ class Database
     private function prepareWhereQuery()
     {
         $where = $this->getWhere();
-        $orWhere = $this->getOrWhere();
 
         $string = '';
         if (!empty($where)) {
@@ -408,15 +418,20 @@ class Database
         $args = [];
         $s = '';
         foreach ($where as $item) {
-            $s .= " {$item[0]} {$item[1]} ? $item[3]";
+            if ($s !== '') {
+                $s .= "$item[3] {$item[0]} {$item[1]} ? ";
+            } else {
+                $s .= "{$item[0]} {$item[1]} ?  ";
+            }
             $args[] = $item[2];
         }
+
 
         $s = rtrim($s, $item[3]);
 
         $this->args = array_merge($this->args, $args);
 
-        return $prepared['content'];
+        return $s;
     }
 
 
@@ -436,30 +451,6 @@ class Database
         }
         return [
             'content' => rtrim($s, ","),
-            'args' => $arr,
-        ];
-    }
-
-    /**
-     *
-     * @param array $args
-     * @param string $start
-     * @return mixed
-     */
-    private function databaseStringBuilderWithStart(array $args, $start)
-    {
-        $s = '';
-        $arr = [];
-        foreach ($args as $arg) {
-            $s .= " {$arg[0]} {$arg[1]} ? $start";
-            $arr[] = $arg[2];
-        }
-        if (!count($args) === 1) {
-            $s = $start . $s;
-        }
-        $s = rtrim($s, $start);
-        return [
-            'content' => $s,
             'args' => $arr,
         ];
     }

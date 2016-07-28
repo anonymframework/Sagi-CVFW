@@ -9,6 +9,16 @@
 class Controller
 {
 
+    /**
+     * @var string
+     */
+    protected $loginUri = '/auth/login';
+
+    /**
+     * @var string
+     */
+    protected $redirectUri = '/home';
+
     public static $db;
 
     protected static $view;
@@ -44,11 +54,51 @@ class Controller
         return $this;
     }
 
-    public function login($usernameOrEmail, $password)
+    /**
+     * @return bool
+     */
+    public function isLogined()
     {
-        $login = $this->db()->setTable('users')->where('username', $usernameOrEmail)->orWhere('email', $usernameOrEmail)->where('password', $password);
+        return isset($_SESSION['user_session']);
+    }
 
-        var_dump($login->get());
+    /**
+     * @param $username
+     * @param $password
+     * @return bool
+     */
+    public function login($username, $password)
+    {
+        if ($this->isLogined()) {
+            App::redirect($this->redirectUri);
+        }
+
+        $login = $this->db()->setTable('users')->select("username, email, registered_date")->where('username', $username)->where('password', md5($password));
+
+        $fetch = $login->fetch();
+
+        if ($fetch) {
+            $_SESSION['user_session'] = base64_encode(serialize($fetch));
+
+            App::redirect($this->redirectUri);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @param array $parameters
+     * @return mixed
+     */
+    public function register($parameters)
+    {
+        if ($this->isLogined()) {
+            App::redirect($this->redirectUri);
+        }
+
+        $register = $this->db()->setTable('users')->create($parameters);
+
+        return $register;
     }
 
     /**

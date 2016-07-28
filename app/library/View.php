@@ -230,17 +230,15 @@ class View
     /**
      * @param null $file
      */
-    public
-    function render($file = null, $return = false)
+    public function render($file = null, $return = false)
     {
         if (!is_null($file)) {
             $this->setFile($file);
         }
 
-
         $this->with('viewClassObject', $this);
-        if ($content = $this->getFileContent()) {
 
+        if ($content = $this->getFileContent()) {
             $replaceContent = $this->handleContent($content);
 
             if ($return) {
