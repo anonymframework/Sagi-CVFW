@@ -22,6 +22,11 @@ class Validator
     /**
      * @var array
      */
+    protected $filtredDatas;
+
+    /**
+     * @var array
+     */
     protected $messages = [
         'required' => ':field alanı doldurulması zorunludur.',
         'min' => ':field alanına girilebilecek en küçük değer :min',
@@ -53,21 +58,35 @@ class Validator
         $rules = $this->getRules();
         $filters = $this->getFilters();
 
-        $this->handleRules($rules);
         $this->handleFilters($filters);
+        $this->handleRules($rules);
     }
 
+    /**
+     * @param array $filters
+     */
     private function handleFilters(array $filters)
     {
         foreach ($filters as $index => $subFilters) {
             $subFilters = explode("|", $subFilters);
 
             foreach ($subFilters as $subFilter) {
-                $filterFunc = 'handleFilter'.ucfirst($subFilter);
+                $filterFunc = 'handleFilter' . ucfirst($subFilter);
 
                 $filtred = call_user_func_array(array($this, $filterFunc), [$this->datas[$index]]);
+                $this->datas[$index] = $filtred;
             }
         }
+    }
+
+    protected function handleFilterXss($data)
+    {
+
+    }
+
+    protected function handleFilterStrip_tags($data)
+    {
+
     }
 
     /**
