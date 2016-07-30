@@ -25,6 +25,11 @@ class Controller
     protected $registerUri = '/auth/register';
 
     /**
+     * @var string
+     */
+    protected $loginSessionName = 'user_session';
+
+    /**
      * @var Database
      */
     public static $db;
@@ -82,7 +87,7 @@ class Controller
      */
     public function isLogined()
     {
-        return isset($_SESSION['user_session']);
+        return Session::has($this->loginSessionName);
     }
 
     /**
@@ -117,7 +122,7 @@ class Controller
         $fetch = $login->fetch();
 
         if ($fetch) {
-            $_SESSION['user_session'] = base64_encode(serialize($fetch));
+            Session::set($this->loginSessionName, base64_encode(serialize($fetch)));
 
             App::redirect($this->redirectUri);
         } else {

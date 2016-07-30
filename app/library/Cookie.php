@@ -45,4 +45,13 @@ class Cookie
 
         return true;
     }
+
+    /**
+     * @param $name
+     * @return bool
+     */
+    public static function has($name)
+    {
+        return isset($_COOKIE[$name]);
+    }
 }

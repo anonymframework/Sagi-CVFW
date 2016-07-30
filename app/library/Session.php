@@ -56,4 +56,13 @@ class Session
         $_SESSION = [];
         return true;
     }
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public static function has($name)
+    {
+        return isset($_SESSION[$name]);
+    }
 }
