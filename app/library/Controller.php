@@ -95,7 +95,7 @@ class Controller
      * @param $password
      * @return bool
      */
-    public function login($username, $password)
+    public function Authlogin($username, $password)
     {
         if ($this->isLogined()) {
             App::redirect($this->redirectUri);
@@ -126,7 +126,9 @@ class Controller
 
             App::redirect($this->redirectUri);
         } else {
-            return false;
+            Session::set('errors', array(
+                'Giriş İşlemi sırasında bir hata oluştu'
+            ));
         }
     }
 
@@ -134,7 +136,7 @@ class Controller
      * @param array $parameters
      * @return mixed
      */
-    public function register($parameters)
+    public function Authregister($parameters)
     {
         if ($this->isLogined()) {
             App::redirect($this->redirectUri);
@@ -160,8 +162,11 @@ class Controller
             App::redirect($this->registerUri, null, $errors);
         }
 
+        $datas = $validator->datas();
 
-        $register = $this->db()->setTable('users')->create($validator->datas());
+        $datas['password'] = md5($datas['password']);
+
+        $register = $this->db()->setTable('users')->create($datas);
 
         return $register;
     }

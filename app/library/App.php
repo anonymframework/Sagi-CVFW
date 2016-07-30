@@ -151,7 +151,7 @@ class App
     public static function redirect($uri, $time = null, $sessions = null)
     {
         if (!is_null($sessions)) {
-            Session::set($sessions);
+            Session::set('errors', $sessions);
         }
 
         if (is_null($time)) {
