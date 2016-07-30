@@ -13,6 +13,7 @@ class App
      */
     private $url;
 
+    private static $uri;
 
     /**
      * @var
@@ -23,6 +24,7 @@ class App
     {
         $this->configs = $configs;
         $this->url = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';
+        static::$uri = $configs['uri'];
     }
 
     public function handleRequest()
@@ -153,6 +155,8 @@ class App
         if (!is_null($sessions)) {
             Session::set('errors', $sessions);
         }
+
+        $uri = static::$uri . $uri;
 
         if (is_null($time)) {
             header('Location: ' . $uri);

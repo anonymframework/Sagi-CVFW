@@ -15,5 +15,7 @@ return array(
 
         'view_path' => 'app/views',
         'dalvik_path' => 'app/dalviks'
-    ]
+    ],
+
+    'uri' => 'http://localhost/Sagi-CVFW'
 );
