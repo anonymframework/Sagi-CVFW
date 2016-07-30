@@ -66,7 +66,9 @@ class View
     ];
 
     private $selfMethods = [
-        'inc'
+        'inc',
+        'header',
+        'footer'
     ];
 
     /**
@@ -153,7 +155,7 @@ class View
     {
         $methodName = 'compile' . ucfirst($raw);
         $argsN = [];
-        $args = explode(',', $m[4]);
+        $args = explode(',', isset($m[4]) ? $m[4] : '');
 
         foreach ($args as $item) {
             $argsN[] = str_replace(["'", '"'], "", $item);
@@ -170,6 +172,22 @@ class View
         $content = $this->render($file, true);
 
         return $content;
+    }
+
+    /**
+     * @return mixed|View
+     */
+    public function compileHeader()
+    {
+        return $this->compileInc('header');
+    }
+
+    /**
+     * @return mixed|View
+     */
+    public function compileFooter()
+    {
+        return $this->compileInc('footer');
     }
 
     /**
