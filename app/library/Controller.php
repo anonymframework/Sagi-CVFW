@@ -19,6 +19,11 @@ class Controller
      */
     protected $redirectUri = '/home';
 
+    /**
+     * @var string
+     */
+    protected $registerUri = '/auth/register';
+
     public static $db;
 
     protected static $view;
@@ -55,6 +60,18 @@ class Controller
     }
 
     /**
+     * @param array $datas
+     * @param array $rules
+     * @param array $filters
+     * @param array $messages
+     * @return Validator
+     */
+    public function validation($datas = [], $rules = [], $filters = [], $messages = [])
+    {
+        return new Validator($datas, $rules, $filters, $messages);
+    }
+
+    /**
      * @return bool
      */
     public function isLogined()
@@ -71,6 +88,22 @@ class Controller
     {
         if ($this->isLogined()) {
             App::redirect($this->redirectUri);
+        }
+
+        $validator = $this->validation([
+            'username' => $username,
+            'password' => $password
+        ], [
+            'username' => 'required|alpha_numeric|digit_between:6,20',
+            'password' => 'required|digit_min:6'
+        ], [
+            'username' => 'xss',
+            'password' => 'xss'
+        ]);
+
+
+        if ($errors = $validator->errors()) {
+            App::redirect($this->loginUri, null, $errors);
         }
 
         $login = $this->db()->setTable('users')->select("username, email, registered_date")->where('username', $username)->where('password', md5($password));
@@ -96,7 +129,28 @@ class Controller
             App::redirect($this->redirectUri);
         }
 
-        $register = $this->db()->setTable('users')->create($parameters);
+        $datas = array(
+            'username' => $parameters['username'],
+            'password' => $parameters['password'],
+            'email' => $parameters['email']
+        );
+
+        $validator = $this->validation($datas, array(
+            'username' => 'required|digit_max:25|alpha_numeric',
+            'password' => 'required|digit_min:6',
+            'email' => 'required|digit_min:6|email'
+        ), array(
+            'username' => 'xss',
+            'password' => 'xss',
+            'email' => 'strip_tags'
+        ));
+
+        if ($errors = $validator->errors()) {
+            App::redirect($this->registerUri, null, $errors);
+        }
+
+
+        $register = $this->db()->setTable('users')->create($validator->datas());
 
         return $register;
     }
