@@ -10,10 +10,13 @@ class Auth extends \Controller
 
         if ($_POST) {
             $login = $this->Authlogin($_POST['username'], $_POST['password']);
-
-            var_dump($login);
         }
 
         $this->view('login');
+    }
+
+    public function logout()
+    {
+        $this->AuthExit();
     }
 }

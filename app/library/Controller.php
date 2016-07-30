@@ -65,6 +65,14 @@ class Controller
      */
     public function view($file)
     {
+        if (Session::has('errors')) {
+            $this->with('errors', Session::get('errors'));
+        }
+
+        $this->with('isLogined', $this->isLogined());
+
+        Session::delete('errors');
+
         static::$view->render($file)->show();
 
         return $this;
@@ -130,6 +138,17 @@ class Controller
                 'Giriş İşlemi sırasında bir hata oluştu'
             ));
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function AuthExit()
+    {
+        Session::delete($this->loginSessionName);
+
+        App::redirect($this->redirectUri);
+        return true;
     }
 
     /**

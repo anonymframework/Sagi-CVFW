@@ -100,7 +100,7 @@ class App
      */
     public function createControllerInstance($controller)
     {
-        $controller = $this->getFullControllerNamespace($controller);
+        $controller = $this->getFullControllerNamespace(ucfirst($controller));
 
         $this->controller = new $controller;
     }
