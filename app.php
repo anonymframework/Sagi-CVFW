@@ -1,6 +1,7 @@
 <?php
 
 $configs = include 'app/configs.php';
+include 'app/helper.php';
 
 $app = new App($configs);
 
