@@ -24,8 +24,14 @@ class Controller
      */
     protected $registerUri = '/auth/register';
 
+    /**
+     * @var Database
+     */
     public static $db;
 
+    /**
+     * @var View
+     */
     protected static $view;
 
     /**

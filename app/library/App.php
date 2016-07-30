@@ -146,13 +146,20 @@ class App
     /**
      * @param $uri
      * @param null $time
+     * @param array $sessions
      */
-    public static function redirect($uri, $time = null)
+    public static function redirect($uri, $time = null, $sessions = null)
     {
+        if (!is_null($sessions)) {
+            Session::set($sessions);
+        }
+
         if (is_null($time)) {
             header('Location: ' . $uri);
         } else {
             header('refresh: ' . $time . ';url=' . $uri);
         }
+
+
     }
 }
