@@ -60,6 +60,14 @@ class Controller
     }
 
     /**
+     * @return mixed
+     */
+    public function user()
+    {
+        return Session::get($this->loginSessionName);
+    }
+
+    /**
      * @param $file
      * @return $this
      */

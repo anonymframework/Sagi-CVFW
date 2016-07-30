@@ -62,7 +62,8 @@ class View
         'foreach',
         'swith',
         'case',
-        'else'
+        'else',
+        'elseif'
     ];
 
     private $selfMethods = [
